@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ทำแบบทดสอบ | Quiz System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<style>
+  .quiz-topbar { position:sticky; top:0; z-index:100; }
+  .timer-box { font-size:1.4rem; font-weight:800; padding:8px 18px; border-radius:12px; background:var(--card-bg); }
+  .timer-warning { color:var(--danger) !important; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.5;} }
+  .choice-option { display:block; padding:14px 16px; border-radius:12px; background:var(--card-bg); margin-bottom:10px; cursor:pointer; border:2px solid transparent; transition:.2s; }
+  .choice-option:hover { border-color:var(--primary); }
+  .choice-option.selected { border-color:var(--primary); background:rgba(42,167,161,0.15); }
+  .palette-btn { width:40px; height:40px; border-radius:10px; border:none; font-weight:700; }
+  .palette-answered { background:var(--secondary); color:#fff; }
+  .palette-flagged { background:var(--warning); color:#333; }
+  .palette-current { outline:3px solid var(--primary); }
+  .palette-empty { background:#e0e0e0; color:#555; }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-glass quiz-topbar px-3 px-md-4">
+  <span class="fw-bold" id="quizTitle" style="color:var(--primary)">กำลังโหลด...</span>
+  <div class="d-flex align-items-center gap-3">
+    <button class="btn btn-sm btn-icon" onclick="toggleFullscreen()" title="โหมดเต็มจอ"><i class="fa-solid fa-expand"></i></button>
+    <span class="timer-box" id="timerBox"><i class="fa-solid fa-clock me-1"></i><span id="timerText">--:--</span></span>
+  </div>
+</nav>
+<div class="container py-4">
+  <div class="glass-card p-3 mb-3">
+    <div class="d-flex justify-content-between mb-1"><span>ข้อ <span id="currentIndex">1</span> / <span id="totalIndex">1</span></span><span id="autoSaveStatus" class="text-muted small"></span></div>
+    <div class="progress" style="height:10px; border-radius:6px;"><div id="quizProgressBar" class="progress-bar" style="width:0%; background:var(--primary);"></div></div>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-9">
+      <div class="glass-card p-4" id="questionCard"></div>
+      <div class="d-flex justify-content-between mt-3">
+        <button class="btn btn-secondary-custom" id="btnPrev" onclick="goPrev()"><i class="fa-solid fa-arrow-left me-1"></i>ย้อนกลับ</button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-warning" id="btnFlag" onclick="toggleFlag()"><i class="fa-regular fa-flag me-1"></i>ทำเครื่องหมาย</button>
+          <button class="btn btn-secondary-custom" onclick="goNext(true)">ข้ามข้อนี้</button>
+        </div>
+        <button class="btn btn-primary-custom" id="btnNext" onclick="goNext(false)">ถัดไป<i class="fa-solid fa-arrow-right ms-1"></i></button>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="glass-card p-3 mb-3">
+        <h6 class="mb-2">ภาพรวมข้อสอบ</h6>
+        <div id="questionPalette" class="d-flex flex-wrap gap-2"></div>
+        <hr>
+        <div class="small">
+          <span class="palette-btn palette-answered d-inline-block text-center" style="width:16px;height:16px;font-size:0;"></span> ตอบแล้ว &nbsp;
+          <span class="palette-btn palette-flagged d-inline-block text-center" style="width:16px;height:16px;font-size:0;"></span> ทำเครื่องหมาย &nbsp;
+          <span class="palette-btn palette-empty d-inline-block text-center" style="width:16px;height:16px;font-size:0;"></span> ยังไม่ตอบ
+        </div>
+      </div>
+      <button class="btn btn-danger-custom w-100 py-2" onclick="confirmSubmit()"><i class="fa-solid fa-paper-plane me-1"></i>ส่งข้อสอบ</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/quiz.js"></script>
+</body>
+</html>
